@@ -31,8 +31,10 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/myapp-web:latest
-          file: ./Dockerfile.web
+            ${{ secrets.DOCKER_USERNAME }}/recipe-api-web:latest
+          build-args: |
+            CELERY_BROKER_URL=${{ secrets.CELERY_BROKER_URL }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
 
       - name: Build and push celery image
         uses: docker/build-push-action@v5
@@ -40,8 +42,10 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/myapp-celery:latest
-          file: ./Dockerfile.celery
+            ${{ secrets.DOCKER_USERNAME }}/recipe-api-celery:latest
+          build-args: |
+            CELERY_BROKER_URL=${{ secrets.CELERY_BROKER_URL }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
 
       - name: Build and push celery-beat image
         uses: docker/build-push-action@v5
@@ -49,8 +53,10 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/myapp-celery-beat:latest
-          file: ./Dockerfile.celery-beat
+            ${{ secrets.DOCKER_USERNAME }}/recipe-api-celery-beat:latest
+          build-args: |
+            CELERY_BROKER_URL=${{ secrets.CELERY_BROKER_URL }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
 
       - name: Post success message
         run: echo "Docker images successfully built and pushed to Docker Hub"
