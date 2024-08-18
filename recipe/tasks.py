@@ -35,8 +35,8 @@ def send_daily_notifications():
     today = timezone.now().date()
     
     # Get all recipes that received likes today
-    #liked_recipes = Recipe.objects.filter(recipelike__created__date=today).distinct()
-    liked_recipes = Recipe.objects.all()
+    liked_recipes = Recipe.objects.filter(recipelike__created__date=today).distinct()
+    #liked_recipes = Recipe.objects.all()
 
     for recipe in liked_recipes:
         email = recipe.author.email

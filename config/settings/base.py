@@ -135,7 +135,8 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+#will only allow prod urls in prod
+ALLOWED_HOSTS = ['*']  
 
 
 # Email config
