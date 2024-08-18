@@ -3,10 +3,10 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   build:
@@ -32,6 +32,7 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/myapp-web:latest
+          file: ./Dockerfile.web
 
       - name: Build and push celery image
         uses: docker/build-push-action@v5
@@ -40,6 +41,7 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/myapp-celery:latest
+          file: ./Dockerfile.celery
 
       - name: Build and push celery-beat image
         uses: docker/build-push-action@v5
@@ -48,6 +50,7 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/myapp-celery-beat:latest
+          file: ./Dockerfile.celery-beat
 
       - name: Post success message
         run: echo "Docker images successfully built and pushed to Docker Hub"
