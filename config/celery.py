@@ -27,7 +27,7 @@ app.conf.update(
 app.conf.beat_schedule = {
     'send-daily-notifications': {
         'task': 'recipe.tasks.send_daily_notifications',
-        'schedule': crontab(hour=15, minute=34),  
+        'schedule': crontab(hour=1, minute=10),  
     },
 }
 
