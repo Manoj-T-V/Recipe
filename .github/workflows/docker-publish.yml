@@ -36,7 +36,9 @@ jobs:
             SECRET_KEY=${{ secrets.SECRET_KEY }}
             CELERY_BROKER_URL=${{ secrets.CELERY_BROKER_URL }}
             DATABASE_URL=${{ secrets.DATABASE_URL }}
-
+            DB_PORT=${{ secrets.DB_PORT }}
+            DB_HOST=${{ secrets.DB_HOST }}
+            
       - name: Build and push celery image
         uses: docker/build-push-action@v5
         with:
