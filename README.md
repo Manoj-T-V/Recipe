@@ -5,7 +5,7 @@ This is an API for managing recipes, users, and related functionalities. The API
 ## Features
 - Recipe management: create, update, delete, and view recipes.
 - Recipe likes and user bookmarks.
-- Email queue to send send notifications asynchronously,including a daily notification to authors about the likes received on their recipes.
+- Email queue to send notifications asynchronously,including a daily notification to authors about the likes received on their recipes.
 - User authentication and registration with JWT tokens.
 - test cases for all APIs and generate a coverage report.
 - Containerized the application
