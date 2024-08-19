@@ -5,7 +5,10 @@ This is an API for managing recipes, users, and related functionalities. The API
 ## Features
 - Recipe management: create, update, delete, and view recipes.
 - Recipe likes and user bookmarks.
+- Email queue to send send notifications asynchronously,including a daily notification to authors about the likes received on their recipes.
 - User authentication and registration with JWT tokens.
+- test cases for all APIs and generate a coverage report.
+- Containerized the application
 
 ## Technologies Used
 - **Backend**: Django, Django REST Framework
@@ -15,8 +18,7 @@ This is an API for managing recipes, users, and related functionalities. The API
 - **API Documentation**: drf-spectacular (Swagger UI)
 
 ## Live Version
-The live version of the application is hosted on [Render](https://render.com).
-[Live](#) <https://recipe-api-oyib.onrender.com/>
+The live version of the application is hosted on Render <https://recipe-api-oyib.onrender.com/>
 
 
 ## Table of Contents
@@ -27,6 +29,7 @@ The live version of the application is hosted on [Render](https://render.com).
 - Installation
   - Option 1: Clone the Repository and Build Locally
   - Option 2: Use Pre-built Docker Images
+- CI/CD
 - Running Tests
 - Scaling the Service
 
@@ -36,8 +39,7 @@ The live version of the application is hosted on [Render](https://render.com).
 - Python 
 - PostgreSQL 
 - Redis 
-- Docker installed on your local machine.
-- Docker Compose installed on your local machine.
+- Docker and Docker Compose.
 
 
 
@@ -161,20 +163,21 @@ To run tests and check coverage, follow these steps:
     Ensure you have `pytest` and `pytest-cov` installed:
 
     ```bash
-    pip install pytest pytest-cov
+    pip install pytest pytest-cov pytest-django
     ```
 
     Then, run the tests with coverage and generate a coverage report:
 
     ```bash
     docker-compose exec web pytest --cov=recipe --cov-report=html
+    pytest --cov=recipe --cov-report=html
     ```
 
     - **`--cov=recipe`**: Measures coverage for the `recipe` module.
     - **`--cov-report=html`**: Generates an HTML report of the coverage results, saved in the `htmlcov` directory.
 
 2. **View Coverage Report**:
-    Open the generated HTML report in a web browser:
+    Open the generated HTML report in a web browser: Currently this application test coverage is not 100 percent.
 
     ```bash
     open htmlcov/index.html
@@ -184,7 +187,7 @@ To run tests and check coverage, follow these steps:
 To scale your services, you can adjust the number of replicas for your Docker services. Here are some examples for scaling different services:
 
 1. **Scaling All Services**:
-   You can scale multiple services simultaneously:
+   You can scale multiple services individually or simultaneously:
 
     ```bash
     docker-compose up --scale web=3 --scale celery=3 --scale celery-beat=2
