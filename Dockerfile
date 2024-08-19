@@ -25,6 +25,7 @@ COPY . /recipe-api/
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
+
 # Expose port 8000 (for Django)
 EXPOSE 8000
 
