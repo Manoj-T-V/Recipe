@@ -47,7 +47,7 @@ jobs:
             EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
             CELERY_RESULT_BACKEND=${{ secrets.CELERY_RESULT_BACKEND }}
             CELERYRESULTBACKEND=${{secrets.CELERYRESULTBACKEND}}
-            CELERYRESULTBACKEND=${{CELERYRESULTBACKEND}}
+            CELERYBROKERURL=${{secrets.CELERYBROKERURL}}
 
       - name: Build and push celery image
         uses: docker/build-push-action@v5
