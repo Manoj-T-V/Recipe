@@ -166,7 +166,7 @@ To run tests and check coverage, follow these steps:
     pip install pytest pytest-cov pytest-django
     ```
 
-    Then, run the tests with coverage and generate a coverage report:
+    Then, run the tests with coverage and generate a coverage report, replace recipe with user for user testing:
 
     ```bash
     docker-compose exec web pytest --cov=recipe --cov-report=html
