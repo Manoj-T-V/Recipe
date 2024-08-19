@@ -33,6 +33,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/recipe-api-web:latest
           build-args: |
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
             CELERY_BROKER_URL=${{ secrets.CELERY_BROKER_URL }}
             DATABASE_URL=${{ secrets.DATABASE_URL }}
 
