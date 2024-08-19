@@ -38,7 +38,15 @@ jobs:
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             DB_PORT=${{ secrets.DB_PORT }}
             DB_HOST=${{ secrets.DB_HOST }}
-            
+            DB_NAME=${{ secrets.DB_NAME }}
+            DB_USERNAME=${{ secrets.DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DB_HOSTNAME=${{ secrets.DB_HOSTNAME }}
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            EMAIL_USER=${{ secrets.EMAIL_USER }}
+            EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
+            CELERY_RESULT_BACKEND=${{ secrets.CELERY_RESULT_BACKEND }}
+
       - name: Build and push celery image
         uses: docker/build-push-action@v5
         with:
