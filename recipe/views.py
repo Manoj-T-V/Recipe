@@ -9,12 +9,14 @@ from .permissions import IsAuthorOrReadOnly
 from .tasks import notify_author_about_likes
 import logging
 import smtplib, ssl
+
 logger = logging.getLogger(__name__)
+
 class RecipeListAPIView(generics.ListAPIView):
     """
     Get: a collection of recipes
     """
-    queryset = Recipe.objects.all()
+    queryset = Recipe.objects.all().select_related('author').prefetch_related('category')
     serializer_class = RecipeSerializer
     permission_classes = (AllowAny,)
     filterset_fields = ('category__name', 'author__username')
@@ -36,7 +38,7 @@ class RecipeAPIView(generics.RetrieveUpdateDestroyAPIView):
     """
     Get, Update, Delete a recipe
     """
-    queryset = Recipe.objects.all()
+    queryset = Recipe.objects.all().select_related('author').prefetch_related('category')
     serializer_class = RecipeSerializer
     permission_classes = (IsAuthorOrReadOnly,)
 
@@ -47,22 +49,18 @@ class RecipeLikeAPIView(generics.CreateAPIView):
     """
     serializer_class = RecipeLikeSerializer
     permission_classes = (IsAuthenticated,)
+
     def post(self, request, pk):
-        recipe = get_object_or_404(Recipe, id=self.kwargs['pk'])
-        new_like, created = RecipeLike.objects.get_or_create(
-            user=request.user, recipe=recipe)
-        if created:
-            new_like.save()
+        recipe = get_object_or_404(Recipe.objects.select_related('author'), id=pk)
+        if not RecipeLike.objects.filter(user=request.user, recipe=recipe).exists():
+            RecipeLike.objects.create(user=request.user, recipe=recipe)
             return Response(status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        recipe = get_object_or_404(Recipe, id=self.kwargs['pk'])
+        recipe = get_object_or_404(Recipe.objects.select_related('author'), id=pk)
         like = RecipeLike.objects.filter(user=request.user, recipe=recipe)
         if like.exists():
             like.delete()
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
