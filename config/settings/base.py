@@ -204,6 +204,70 @@ CELERY_BROKER_URL = config('CELERYBROKERURL')
 CELERY_RESULT_BACKEND = config('CELERYRESULTBACKEND')
 
 
+#loggging
+
+
+# Ensure the logs directory exists
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+os.makedirs(LOG_DIR, exist_ok=True)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # Keeps Django's default logging behavior
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'django_info.log'),
+            'formatter': 'verbose',
+            'maxBytes': 1024*1024*5,  # 5MB
+            'backupCount': 5,
+        },
+        'error_file': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'django_error.log'),
+            'formatter': 'verbose',
+            'maxBytes': 1024*1024*5,  # 5MB
+            'backupCount': 5,
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'error_file', 'console', 'mail_admins'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'myapp': {  # Replace 'myapp' with your app name
+            'handlers': ['file', 'error_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
+
+
 
 
 
