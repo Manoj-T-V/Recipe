@@ -3,10 +3,10 @@
 This is an API for managing recipes, users, and related functionalities. The API is built with Django, Django REST Framework, and PostgreSQL, and it uses Celery and Redis for background tasks.
 
 ## Features
-- Recipe management: create, update, delete, and view recipes.
+- Recipe management: create, update, delete, and view recipes with optimised querysets.
 - Recipe likes and user bookmarks.
 - Email queue to send notifications asynchronously,including a daily notification to authors about the likes received on their recipes.
-- User authentication and registration with JWT tokens.
+- User authentication and registration with optimised querysets.
 - test cases for all APIs and generate a coverage report.
 - Containerized the application
 
