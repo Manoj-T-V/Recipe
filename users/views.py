@@ -11,13 +11,11 @@ from .models import Profile
 from recipe.serializers import RecipeSerializer
 from . import serializers
 
-
 User = get_user_model()
-
 
 class UserRegisterationAPIView(GenericAPIView):
     """
-    An endpoint for the client to create a new User. 
+    An endpoint for the client to create a new User.
     """
     permission_classes = (AllowAny,)
     serializer_class = serializers.UserRegisterationSerializer
@@ -87,7 +85,7 @@ class UserProfileAPIView(RetrieveUpdateAPIView):
     """
     Get, Update user profile
     """
-    queryset = Profile.objects.all()
+    queryset = Profile.objects.select_related('user')
     serializer_class = serializers.ProfileSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -99,7 +97,7 @@ class UserAvatarAPIView(RetrieveUpdateAPIView):
     """
     Get, Update user avatar
     """
-    queryset = Profile.objects.all()
+    queryset = Profile.objects.select_related('user')
     serializer_class = serializers.ProfileAvatarSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -113,30 +111,27 @@ class UserBookmarkAPIView(ListCreateAPIView):
     """
     serializer_class = RecipeSerializer
     permission_classes = (IsAuthenticated,)
-    profile = Profile.objects.all()
 
     def get_queryset(self):
-        user = User.objects.get(id=self.kwargs['pk'])
-        user_profile = get_object_or_404(self.profile, user=user)
+        user = get_object_or_404(User, id=self.kwargs['pk'])
+        user_profile = get_object_or_404(Profile.objects.select_related('user'), user=user)
         return user_profile.bookmarks.all()
 
     def post(self, request, pk):
-        user = User.objects.get(id=pk)
-        user_profile = get_object_or_404(self.profile, user=user)
-        recipe = Recipe.objects.get(id=request.data['id'])
-        if user_profile:
-            user_profile.bookmarks.add(recipe)
-            return Response(status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        user_profile = get_object_or_404(Profile.objects.select_related('user'), user_id=pk)
+        recipe = get_object_or_404(Recipe, id=request.data['id'])
+        if user_profile.bookmarks.filter(id=recipe.id).exists():
+            return Response({"detail": "Recipe already bookmarked."}, status=status.HTTP_400_BAD_REQUEST)
+        user_profile.bookmarks.add(recipe)
+        return Response({"detail": "Recipe bookmarked successfully."}, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
-        user = User.objects.get(id=pk)
-        user_profile = get_object_or_404(self.profile, user=user)
-        recipe = Recipe.objects.get(id=request.data['id'])
-        if user_profile:
+        user_profile = get_object_or_404(Profile.objects.select_related('user'), user_id=pk)
+        recipe = get_object_or_404(Recipe, id=request.data['id'])
+        if user_profile.bookmarks.filter(id=recipe.id).exists():
             user_profile.bookmarks.remove(recipe)
-            return Response(status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Recipe removed from bookmarks."}, status=status.HTTP_200_OK)
+        return Response({"detail": "Recipe not found in bookmarks."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PasswordChangeAPIView(UpdateAPIView):
