@@ -73,3 +73,6 @@ jobs:
 
       - name: Post success message
         run: echo "Docker images successfully built and pushed to Docker Hub"
+
+      - name: Trigger Render Deploy
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
