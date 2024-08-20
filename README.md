@@ -9,6 +9,7 @@ This is an API for managing recipes, users, and related functionalities. The API
 - User authentication and registration with optimised querysets.
 - test cases for all APIs and generate a coverage report.
 - Containerized the application
+- Logging feature
 
 ## Technologies Used
 - **Backend**: Django, Django REST Framework
